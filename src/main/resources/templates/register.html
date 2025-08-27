@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <style>
+        /* Animated gradient background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #1d2b64, #f8cdda, #667db6, #0082c8);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            overflow: hidden;
+        }
+
+        @keyframes gradientMove {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        /* Floating giant book icons */
+        .book {
+            position: absolute;
+            font-size: 12rem; /* much bigger now */
+            color: rgba(255, 255, 255, 0.12);
+            animation: float 18s infinite ease-in-out;
+        }
+
+        .book:nth-child(1) { left: 5%; top: 85%; animation-duration: 22s; font-size: 14rem; }
+        .book:nth-child(2) { left: 25%; top: 95%; animation-duration: 20s; font-size: 12rem; }
+        .book:nth-child(3) { left: 60%; top: 90%; animation-duration: 24s; font-size: 13rem; }
+        .book:nth-child(4) { left: 80%; top: 88%; animation-duration: 19s; font-size: 11rem; }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0); opacity: 0.25; }
+            50% { transform: translateY(-250px) rotate(20deg); opacity: 0.5; }
+            100% { transform: translateY(-500px) rotate(-20deg); opacity: 0; }
+        }
+
+        /* Form container with glowing border */
+        .register-container {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 40px 30px;
+            border-radius: 15px;
+            width: 350px;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            border: 2px solid transparent;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { border-color: #ff9a9e; }
+            25% { border-color: #fad0c4; }
+            50% { border-color: #a18cd1; }
+            75% { border-color: #fbc2eb; }
+            100% { border-color: #ff9a9e; }
+        }
+
+        .register-container h2 {
+            margin-bottom: 25px;
+            font-size: 28px;
+            color: #fff;
+            text-shadow: 0 0 8px rgba(255,255,255,0.6);
+        }
+
+        .register-container label {
+            display: block;
+            text-align: left;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .register-container input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .register-container input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .register-container button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .register-container button:hover {
+            transform: scale(1.07);
+            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+        }
+    </style>
+</head>
+<body>
+<!-- Floating giant book icons -->
+<div class="book">📚</div>
+<div class="book">📖</div>
+<div class="book">📘</div>
+<div class="book">📕</div>
+
+<!-- Register Form -->
+<div class="register-container">
+    <h2>Sign Up</h2>
+    <form th:action="@{/OLS/saveUser}" method="post">
+
+
+        <label>Create your username:</label>
+        <input type="text" name="username" placeholder="Choose a username" required/>
+
+        <label>Create a password:</label>
+        <input type="password" name="password" placeholder="Enter a password" required/>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+</body>
+</html>

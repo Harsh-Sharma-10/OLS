@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
+            url("https://cdn.pixabay.com/photo/2016/11/29/04/17/books-1869964_1280.jpg") no-repeat center center/cover;
+            animation: backgroundMove 30s infinite alternate linear;
+        }
+
+        @keyframes backgroundMove {
+            from { background-position: center top; }
+            to { background-position: center bottom; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 50px;
+            width: 80%;
+            max-width: 900px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 40px;
+            color: #ffcc00;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 12px rgba(0,0,0,0.7);
+        }
+
+        p {
+            font-size: 18px;
+            color: #f1f1f1;
+            margin-bottom: 30px;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 25px;
+            width: 250px;
+            transition: 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #ffcc00;
+            font-size: 20px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #e6e6e6;
+        }
+
+        .logout-btn {
+            margin-top: 25px;
+            padding: 12px 25px;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            color: black;
+            background: linear-gradient(45deg, #ffcc00, #ff9900);
+            transition: 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(45deg, #ffaa00, #ff6600);
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📚 Welcome, <span th:text="${#authentication.name}">User</span>!</h1>
+    <p>Your personal library dashboard</p>
+
+    <div class="cards">
+        <!-- Visible to ALL users -->
+        <div class="card">
+            <h3>📖 Browse Books</h3>
+            <p>Explore our collection of books and find your next read.</p>
+        </div>
+        <div class="card" sec:authorize="hasRole('USER')">
+            <h3>⭐ My Favorites</h3>
+            <p>Keep track of your favorite books here.</p>
+        </div>
+
+        <!-- Only visible to ADMIN -->
+        <div class="card" sec:authorize="hasRole('ADMIN')">
+            <h3>👨‍💼 Manage Users & Books</h3>
+            <p>Admin tools to manage the system and content.</p>
+        </div>
+
+        <!-- Visible to ALL -->
+        <div class="card">
+            <h3>⚙️ Manage Account</h3>
+            <p>Update your profile and change your settings.</p>
+        </div>
+    </div>
+    <span th:text="${#authentication != null ? #authentication.name : 'Guest'}"></span>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
+</div>
+</body>
+</html>
