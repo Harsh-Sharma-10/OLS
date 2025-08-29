@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,12 +28,27 @@ public class UserController {
     }
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok(userService.getAllUsers());
+        List<User> users = Collections.emptyList();
+        users = userService.getAllUsers();
+        if(users.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(users,HttpStatus.OK);
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
-        return ResponseEntity.ok(userService.updateUser(id, user));
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody User user){
+        User updatedUser = null;
+        try{
+            updatedUser = userService.getUserById(id).orElse(null);
+        }catch(Exception e){
+            return new ResponseEntity<>("Bad Request " ,HttpStatus.NOT_FOUND);
+        }
+        if(updatedUser != null){
+            return new ResponseEntity<>((updatedUser), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Unable to update the user", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

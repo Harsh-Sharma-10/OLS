@@ -7,6 +7,7 @@ import com.example.OLS.Repository.IssueRepository;
 import com.example.OLS.Repository.RepositoryBooks;
 import com.example.OLS.Repository.Repouser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -34,7 +35,7 @@ public  class IssuingServices implements com.example.OLS.Repository.IssuingServi
     }
 
     @Override
-    public IssueTransaction getTransaction(String id){
+    public IssueTransaction gettransactionbyid(UUID id){
         return issueRepository.findById(id).orElse(null);
     }
     @Override
@@ -43,6 +44,11 @@ public  class IssuingServices implements com.example.OLS.Repository.IssuingServi
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Book book = repositoryBooks.findById(bookid)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
+        boolean alreadyExists = false;
+        alreadyExists = issueRepository.existsByUserAndBookAndReturnedFalse(user,book);
+        if(alreadyExists){
+            throw new RuntimeException("This transaction is already exists with "+user.getUsername());
+        }
 
         if ((!book.isStatus()) || book.getQuantity() == 0) throw new RuntimeException("Book Status Not Active");
         IssueTransaction issueTransaction = new IssueTransaction();
@@ -57,12 +63,15 @@ public  class IssuingServices implements com.example.OLS.Repository.IssuingServi
         return issueRepository.save(issueTransaction); /// finally save the transaction
     }
     @Override
-    public IssueTransaction returnBook(UUID txId) {
-        IssueTransaction tx = issueRepository.findById(String.valueOf(txId))
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+    public IssueTransaction returnBook(int id,String bookid) {
+        IssueTransaction tx = issueRepository.findByUserIdAndBookId(id,bookid);
+
 
         if (tx.isReturned()) {
             throw new RuntimeException("Book already returned");
+        }
+        if(!(tx.getUser().getId().equals(id))){
+            throw new AccessDeniedException("You can not return a book which is not belongs to you");
         }
         tx.setReturned(true);
         tx.setReturnDate(LocalDate.now());

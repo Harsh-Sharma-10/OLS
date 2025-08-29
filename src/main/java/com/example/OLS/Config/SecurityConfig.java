@@ -50,9 +50,9 @@ public class SecurityConfig {
                           .requestMatchers("/admin/**").hasRole("ADMIN")
                           .requestMatchers("/home").hasAnyRole("USER", "ADMIN")
                           .requestMatchers("/api/user/**").hasRole("ADMIN")
-                          .requestMatchers(HttpMethod.GET,"/issuse/**").hasRole("ADMIN")
-                          .requestMatchers(HttpMethod.POST,"/issuse/**").hasAnyRole("ADMIN","USER")
-                          .requestMatchers(HttpMethod.DELETE,"/issuse/**").hasRole("USER")
+                          .requestMatchers(HttpMethod.GET,"/issue/getalltransactions").hasRole("ADMIN")
+                          .requestMatchers(HttpMethod.POST,"/issue/**").hasAnyRole("ADMIN","USER")
+                          .requestMatchers(HttpMethod.DELETE,"/issue/**").hasRole("ADMIN")
                           .anyRequest().authenticated())
                   .formLogin(form -> form
                           .loginPage("/OLS/login")

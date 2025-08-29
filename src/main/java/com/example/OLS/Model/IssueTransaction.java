@@ -1,5 +1,6 @@
 package com.example.OLS.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,10 +23,12 @@ public class IssueTransaction{
 
    @ManyToOne ///Many issuetransaction should be associated with a single user Many - to - one relation
    @JoinColumn(name = "user_id",nullable = false)/// it creates a foreign key user_id stores the reference id of user
+   @JsonBackReference
    private User user;
 
    @ManyToOne/// Many issueTransaction should be associated with a single book
    @JoinColumn(name = "book_id",nullable = false)
+   @JsonBackReference
    private Book book;
 
    @NonNull

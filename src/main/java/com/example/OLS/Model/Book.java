@@ -1,5 +1,6 @@
 package com.example.OLS.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class Book{
     private boolean status;
 
     @OneToMany(mappedBy = "book",cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<IssueTransaction> transactions = new ArrayList<>();
 
 

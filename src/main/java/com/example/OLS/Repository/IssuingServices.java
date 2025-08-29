@@ -11,10 +11,8 @@ import java.util.UUID;
 
 public interface IssuingServices {
     List<IssueTransaction>getALLtransactions();
-    IssueTransaction getTransaction(String id);
+    IssueTransaction gettransactionbyid(UUID id);
     IssueTransaction saveIssueTransaction(int userid, String bookid);
-    IssueTransaction returnBook(UUID txid);
-
-
+    IssueTransaction returnBook(int userid, String bookid);
 
 }

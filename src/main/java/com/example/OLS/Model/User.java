@@ -1,5 +1,6 @@
 package com.example.OLS.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class User {
     private String role;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<IssueTransaction> transactions = new ArrayList<>();
 
 

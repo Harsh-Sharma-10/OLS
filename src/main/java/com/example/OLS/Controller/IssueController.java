@@ -25,10 +25,10 @@ public class IssueController {
         }
             return new ResponseEntity<>(issuingServices.getALLtransactions(),HttpStatus.OK);
     }
-    @GetMapping("getbytransactonid/{id}")
-    public ResponseEntity<IssueTransaction> getTransactionById(@PathVariable Long id){
+    @GetMapping("gettransactionbyid/{id}")
+    public ResponseEntity<IssueTransaction> getTransactionById(@PathVariable UUID id){
         try{
-          IssueTransaction issueTransaction = issuingServices.getTransaction(String.valueOf(id));
+          IssueTransaction issueTransaction = issuingServices.gettransactionbyid(id);
           return new ResponseEntity<>(issueTransaction,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,19 +41,19 @@ public class IssueController {
             issueTransaction = issuingServices.saveIssueTransaction(userid,bookid);
             return new ResponseEntity<>(issueTransaction,HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
 
 
-    @DeleteMapping("/returnbook/{txid}")
-    public ResponseEntity<?> returnBook(@PathVariable UUID txid){
+    @DeleteMapping("/returnbook/{userid}/{bookid}")
+    public ResponseEntity<?>returnBook(@PathVariable int  userid, @PathVariable String bookid){
         IssueTransaction issueTransaction = null;
         try{
-            issueTransaction = issuingServices.returnBook(txid);
+            issueTransaction = issuingServices.returnBook(userid,bookid);
             return new ResponseEntity<>(issueTransaction,HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
 
