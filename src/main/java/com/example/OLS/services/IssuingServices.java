@@ -39,10 +39,11 @@ public  class IssuingServices implements com.example.OLS.Repository.IssuingServi
         return issueRepository.findById(id).orElse(null);
     }
     @Override
-    public IssueTransaction saveIssueTransaction(int userid,String bookid){
-        User user = repouser.findById(userid)
+    public IssueTransaction saveIssueTransaction(String username,String title){
+
+        User user = repouser.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        Book book = repositoryBooks.findById(bookid)
+        Book book = repositoryBooks.findBytitle(title)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
         boolean alreadyExists = false;
         alreadyExists = issueRepository.existsByUserAndBookAndReturnedFalse(user,book);
@@ -63,16 +64,14 @@ public  class IssuingServices implements com.example.OLS.Repository.IssuingServi
         return issueRepository.save(issueTransaction); /// finally save the transaction
     }
     @Override
-    public IssueTransaction returnBook(int id,String bookid) {
-        IssueTransaction tx = issueRepository.findByUserIdAndBookId(id,bookid);
+    public IssueTransaction returnBook(String username,String bookid) {
+        IssueTransaction tx = issueRepository.findByUserUsernameAndBookId(username,bookid).orElseThrow(() -> new RuntimeException("User not found"));
 
 
         if (tx.isReturned()) {
             throw new RuntimeException("Book already returned");
         }
-        if(!(tx.getUser().getId().equals(id))){
-            throw new AccessDeniedException("You can not return a book which is not belongs to you");
-        }
+
         tx.setReturned(true);
         tx.setReturnDate(LocalDate.now());
 

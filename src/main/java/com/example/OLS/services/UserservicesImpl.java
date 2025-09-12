@@ -4,6 +4,7 @@ import com.example.OLS.Model.User;
 import com.example.OLS.Repository.Repouser;
 import com.example.OLS.Repository.userServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,9 @@ public class UserservicesImpl implements userServices {
     BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder(12);   ///Encryption : plaintext-->hash--->hashverify---->plaintext
     @Override
     public User registerUser(@RequestBody User user) {
+        if(userRepository.existsByUsername(user.getUsername())){
+            throw new RuntimeException("Username is already taken!");
+        }
         user.setId(user.getId());
         user.setUsername(user.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -55,5 +59,7 @@ public class UserservicesImpl implements userServices {
     }
 
 
-
+    public boolean usernameExists(String username) {
+        return userRepository.existsByUsername(username);
+    }
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface IssuingServices {
     List<IssueTransaction>getALLtransactions();
     IssueTransaction gettransactionbyid(UUID id);
-    IssueTransaction saveIssueTransaction(int userid, String bookid);
-    IssueTransaction returnBook(int userid, String bookid);
+    IssueTransaction saveIssueTransaction(String username, String title);
+    IssueTransaction returnBook(String username, String bookid);
 
 }

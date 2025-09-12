@@ -5,6 +5,7 @@ import com.example.OLS.Repository.IssuingServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,11 +35,12 @@ public class IssueController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PostMapping("/bookissue/{userid}/{bookid}")
-    public ResponseEntity<?> bookIssue(@PathVariable int userid, @PathVariable String bookid){
+    @PostMapping("/bookissue/{title}")
+    public ResponseEntity<?> bookIssue(@PathVariable String title, Authentication authentication){
         IssueTransaction issueTransaction = null;
+        String username = authentication.getName();
         try{
-            issueTransaction = issuingServices.saveIssueTransaction(userid,bookid);
+            issueTransaction = issuingServices.saveIssueTransaction(username,title);
             return new ResponseEntity<>(issueTransaction,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
@@ -46,11 +48,12 @@ public class IssueController {
     }
 
 
-    @DeleteMapping("/returnbook/{userid}/{bookid}")
-    public ResponseEntity<?>returnBook(@PathVariable int  userid, @PathVariable String bookid){
+    @PutMapping("/returnbook/{bookid}")
+    public ResponseEntity<?>returnBook( @PathVariable String bookid,Authentication authentication){
         IssueTransaction issueTransaction = null;
+        String username = authentication.getName();
         try{
-            issueTransaction = issuingServices.returnBook(userid,bookid);
+            issueTransaction = issuingServices.returnBook(username,bookid);
             return new ResponseEntity<>(issueTransaction,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);

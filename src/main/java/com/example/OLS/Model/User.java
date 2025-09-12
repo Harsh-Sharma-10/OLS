@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    /// Sotre all users as unique
     private Integer id;
     @Column(unique = true)
     @NonNull

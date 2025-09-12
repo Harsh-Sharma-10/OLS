@@ -35,7 +35,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-          return http.csrf(customizer -> customizer.disable())
+          return http.csrf(Customizer -> Customizer.disable())
                   .authorizeHttpRequests(requests -> requests
                           /// Allow registration without authentication
                           .requestMatchers(HttpMethod.GET, "/OLS/register").permitAll()
@@ -52,7 +52,7 @@ public class SecurityConfig {
                           .requestMatchers("/api/user/**").hasRole("ADMIN")
                           .requestMatchers(HttpMethod.GET,"/issue/getalltransactions").hasRole("ADMIN")
                           .requestMatchers(HttpMethod.POST,"/issue/**").hasAnyRole("ADMIN","USER")
-                          .requestMatchers(HttpMethod.DELETE,"/issue/**").hasRole("ADMIN")
+                          .requestMatchers(HttpMethod.DELETE,"/issue/**").hasAnyRole("ADMIN","USER")
                           .anyRequest().authenticated())
                   .formLogin(form -> form
                           .loginPage("/OLS/login")
