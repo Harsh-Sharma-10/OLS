@@ -52,7 +52,7 @@ public class SecurityConfig {
                           .requestMatchers("/api/user/**").hasRole("ADMIN")
                           .requestMatchers(HttpMethod.GET,"/issue/getalltransactions").hasRole("ADMIN")
                           .requestMatchers(HttpMethod.POST,"/issue/**").hasAnyRole("ADMIN","USER")
-                          .requestMatchers(HttpMethod.DELETE,"/issue/**").hasAnyRole("ADMIN","USER")
+                          .requestMatchers(HttpMethod.PUT,"/issue/**").hasAnyRole("ADMIN","USER")
                           .anyRequest().authenticated())
                   .formLogin(form -> form
                           .loginPage("/OLS/login")
